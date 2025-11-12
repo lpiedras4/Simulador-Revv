@@ -4,11 +4,15 @@ public class VehiculoComponent extends Component {
     double masa;
     double velocidad;
     double posicion;
-    int desplazamiento;
+    double desplazamiento;
 
-    int peso;
-    int tiempo;
+    double  peso;
+    double  tiempo;
     double aceleracion;
-
+    double gravedad = 9.81;
+public double peso (double masa, double gravedad){
+    double peso = masa * gravedad;
+    return peso;
+}
 
 }
