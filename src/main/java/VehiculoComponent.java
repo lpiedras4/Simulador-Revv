@@ -13,17 +13,75 @@ public class VehiculoComponent extends Component {
     private double velocidadMaxSegura; //Define el limite de falla del prototipo. Si la velocidad del simulador rebasa esta variable, el prototipo se rompe
     private double coefAero;
     private double areaFrontal;
-    public VehiculoComponent(double masa, double fuerzaFrenado, double fuerzaMotor, double coefF, double coefAero, double areaFrontal){
-        this.masa = masa;
-        this.fuerzaFrenadoMax = fuerzaFrenadoMax;
-        this.fuerzaMotorMax = fuerzaMotorMax;
-        this.coefF = coefF;
-       this.coefAero = coefAero;
-       this.areaFrontal = areaFrontal;
+
+    //Variables para controles
+    private boolean estaAcelerando = false;
+    private boolean estaFrenando = false;
+
+    //Variables de salida
+    private double velocidad = 0.0;
+    private double aceleracion = 0.0;
+    private double potenciaActual = 0;
+    private double trabajoAcumulado = 0;
+    private double fuerzaNetaActual = 0;
+    private double distanciaFrenado = 0;
+    private boolean prototipoRoto = false;
+    private double posicion = 0;
+
+    /* API para controles (getters y setters) */
+
+
+
+    @Override
+    public void onUpdate(double tpf) {
+        super.onUpdate(tpf);
+        if(prototipoRoto){
+            velocidad = 0.0;
+            aceleracion = 0.0;
+            return;
+        }
+
+        double fuerzaMotorAct = 0;
+
+
     }
-public double peso (double masa, double gravedad){
-    double peso = masa * gravedad;
-    return peso;
-}
+
+    public void setAcelerando (boolean estaPresionado){
+        this.estaAcelerando = estaPresionado;
+    }
+    public void setFrenando(boolean estaPresionado){
+        this.estaFrenando = estaPresionado;
+    }
+
+    //Metodos para UI
+    public double getVelocidad(){
+        return this.velocidad;
+    }
+
+    public double getAceleracion(){
+        return this.aceleracion;
+    }
+    public double getPotenciaActual(){
+        return this.potenciaActual;
+    }
+    public double getTrabajoAcumulado(){
+        return this.trabajoAcumulado;
+    }
+    public double getFuerzaNetaActual(){
+        return this.fuerzaNetaActual;
+    }
+
+    public double getDistanciaFrenado(){
+        return this.distanciaFrenado;
+    }
+    public boolean isPrototipoRoto(){
+        return this.prototipoRoto;
+    }
+    public double getDesaceleracionMaxima(){
+        if(masa==0){
+            return 0;
+        }
+        return this.fuerzaFrenadoMax / this.masa;
+    }
 
 }
