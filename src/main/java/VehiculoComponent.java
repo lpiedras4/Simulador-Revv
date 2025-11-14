@@ -28,24 +28,43 @@ public class VehiculoComponent extends Component {
     private boolean prototipoRoto = false;
     private double posicion = 0;
 
-    /* API para controles (getters y setters) */
+
 
 
 
     @Override
     public void onUpdate(double tpf) {
+        if(prototipoRoto){
+            System.out.println("Mostrar mensaje");
+        }else{
+            double fuerzaMotorActual = 0.0;
+            if(estaAcelerando){
+                fuerzaMotorActual = fuerzaMotorMax;
+            }
+            double fuerzaFrenadoActual = 0.0;
+            if(estaFrenando){
+                fuerzaFrenadoActual = fuerzaFrenadoMax;
+            }
+        }
+
+
         super.onUpdate(tpf);
         if(prototipoRoto){
             velocidad = 0.0;
             aceleracion = 0.0;
             return;
         }
-
-        double fuerzaMotorAct = 0;
+        aceleracion = velocidad/tpf;
+        velocidad = 0 + aceleracion * tpf;
+        posicion = 0  + (aceleracion * (tpf*tpf))/2;
+        trabajoAcumulado = fuerzaNetaActual * posicion;
+        potenciaActual = trabajoAcumulado / tpf;
+        fuerzaNetaActual = masa * aceleracion ;
+        distanciaFrenado = (velocidad*velocidad) / 2*aceleracion;
 
 
     }
-
+    /* API para controles (getters y setters) */
     public void setAcelerando (boolean estaPresionado){
         this.estaAcelerando = estaPresionado;
     }
@@ -82,6 +101,30 @@ public class VehiculoComponent extends Component {
             return 0;
         }
         return this.fuerzaFrenadoMax / this.masa;
+    }
+
+    //Setters para configuración del prototipo
+    public void setMasa (double masa){
+        this.masa = masa;
+    }
+    public void setFuerzaMotorMaxima(double fuerzaMotorMax){
+        this.fuerzaMotorMax = fuerzaMotorMax;
+    }
+    public void setFuerzaFrenadoMaxima(double fuerzaFrenadoMax){
+        this.fuerzaFrenadoMax = fuerzaFrenadoMax;
+    }
+    public void setCoefF(double coefF){
+        this.coefF = coefF;
+    }
+    public void setCoefAero(double coefAero){
+        this.coefAero = coefAero;
+    }
+    public void setAreaFrontal (double areaFrontal){
+        this.areaFrontal = areaFrontal;
+    }
+    public void setVelocidadMaxSegura(double velocidadMaxSegura){
+        this.velocidadMaxSegura = velocidadMaxSegura;
+
     }
 
 }
