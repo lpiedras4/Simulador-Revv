@@ -13,7 +13,8 @@ public class VehiculoComponent extends Component {
     private double velocidadMaxSegura; //Define el limite de falla del prototipo. Si la velocidad del simulador rebasa esta variable, el prototipo se rompe
     private double coefAero;
     private double areaFrontal;
-    private double densidadAire = 12250;
+    double desplazamientoFrame = 0;
+    private double densidadAire = 1.225;
 
     //Variables para controles
     private boolean estaAcelerando = false;
@@ -33,15 +34,18 @@ public class VehiculoComponent extends Component {
     private boolean prototipoRoto = false;
     private double posicion = 0;
 
-    private double fuerzaNormal = peso;
+    private double fuerzaNormal = 0;
     private double fuerzaFriccion = 0;
 
 
     @Override
     public void onUpdate(double tpf) {
         peso = masa * gravedad;
+        fuerzaNormal = peso;
         if(prototipoRoto){
-            System.out.println("Mostrar mensaje");
+            velocidad = 0.0;
+            aceleracion = 0.0;
+            return;
         }
 
             fuerzaMotorActual = 0.0;
@@ -52,22 +56,20 @@ public class VehiculoComponent extends Component {
             if(estaFrenando){
                 fuerzaFrenadoActual = -fuerzaFrenadoMax;
             }
-        if(prototipoRoto){
-            velocidad = 0.0;
-            aceleracion = 0.0;
-            return;
-        }
+
         fuerzaResistencia = (velocidad * velocidad) * areaFrontal * coefAero * (densidadAire/2);
-        fuerzaFriccion = coefF*fuerzaNormal;
-        fuerzaNetaActual = -fuerzaFrenadoActual + fuerzaMotorActual + fuerzaNormal - fuerzaResistencia;
-        aceleracion = velocidad/tpf;
+        fuerzaFriccion = -coefF*fuerzaNormal;
+        fuerzaNetaActual = fuerzaFrenadoActual + fuerzaMotorActual - fuerzaFriccion- fuerzaResistencia;
         velocidad = velocidad + aceleracion * tpf;
+        aceleracion = velocidad/tpf;
+
         posicion = posicion + (velocidad*tpf);
-        trabajo = fuerzaMotorActual * (velocidad/tpf);
+        desplazamientoFrame = velocidad * tpf;
+        trabajo = fuerzaMotorActual * desplazamientoFrame;
         trabajoAcumulado = trabajo + trabajoAcumulado;
         potenciaActual = fuerzaMotorActual * velocidad;
 
-        distanciaFrenado = (velocidad*velocidad) / 2*getDesaceleracionMaxima();
+        distanciaFrenado = (velocidad*velocidad) / (2*getDesaceleracionMaxima());
     if(Math.abs(velocidad) > velocidadMaxSegura){
         prototipoRoto = true;
     }
