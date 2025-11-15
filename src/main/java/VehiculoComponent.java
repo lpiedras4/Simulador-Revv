@@ -4,7 +4,7 @@ public class VehiculoComponent extends Component {
     //Inputs iniciales del usuario
     private double masa;
     private double gravedad = 9.81;
-    private double peso = masa * gravedad;
+    private double peso;
     /*Las variables fuerzaFrenadoMax y fuerzaMotorMax son definidas por el usuario y sirven como especificaciones del prototipo
     creado */
     private double fuerzaFrenadoMax;
@@ -13,6 +13,7 @@ public class VehiculoComponent extends Component {
     private double velocidadMaxSegura; //Define el limite de falla del prototipo. Si la velocidad del simulador rebasa esta variable, el prototipo se rompe
     private double coefAero;
     private double areaFrontal;
+    private double densidadAire = 12250;
 
     //Variables para controles
     private boolean estaAcelerando = false;
@@ -22,46 +23,54 @@ public class VehiculoComponent extends Component {
     private double velocidad = 0.0;
     private double aceleracion = 0.0;
     private double potenciaActual = 0;
+    private double trabajo = 0;
     private double trabajoAcumulado = 0;
     private double fuerzaNetaActual = 0;
+    private double fuerzaFrenadoActual = 0;
+    private double fuerzaMotorActual = 0;
+    private double fuerzaResistencia =0;
     private double distanciaFrenado = 0;
     private boolean prototipoRoto = false;
     private double posicion = 0;
 
-
-
+    private double fuerzaNormal = peso;
+    private double fuerzaFriccion = 0;
 
 
     @Override
     public void onUpdate(double tpf) {
+        peso = masa * gravedad;
         if(prototipoRoto){
             System.out.println("Mostrar mensaje");
-        }else{
-            double fuerzaMotorActual = 0.0;
+        }
+
+            fuerzaMotorActual = 0.0;
             if(estaAcelerando){
                 fuerzaMotorActual = fuerzaMotorMax;
             }
-            double fuerzaFrenadoActual = 0.0;
+            fuerzaFrenadoActual = 0.0;
             if(estaFrenando){
-                fuerzaFrenadoActual = fuerzaFrenadoMax;
+                fuerzaFrenadoActual = -fuerzaFrenadoMax;
             }
-        }
-
-
-        super.onUpdate(tpf);
         if(prototipoRoto){
             velocidad = 0.0;
             aceleracion = 0.0;
             return;
         }
+        fuerzaResistencia = (velocidad * velocidad) * areaFrontal * coefAero * (densidadAire/2);
+        fuerzaFriccion = coefF*fuerzaNormal;
+        fuerzaNetaActual = -fuerzaFrenadoActual + fuerzaMotorActual + fuerzaNormal - fuerzaResistencia;
         aceleracion = velocidad/tpf;
-        velocidad = 0 + aceleracion * tpf;
-        posicion = 0  + (aceleracion * (tpf*tpf))/2;
-        trabajoAcumulado = fuerzaNetaActual * posicion;
-        potenciaActual = trabajoAcumulado / tpf;
-        fuerzaNetaActual = masa * aceleracion ;
-        distanciaFrenado = (velocidad*velocidad) / 2*aceleracion;
+        velocidad = velocidad + aceleracion * tpf;
+        posicion = posicion + (velocidad*tpf);
+        trabajo = fuerzaMotorActual * (velocidad/tpf);
+        trabajoAcumulado = trabajo + trabajoAcumulado;
+        potenciaActual = fuerzaMotorActual * velocidad;
 
+        distanciaFrenado = (velocidad*velocidad) / 2*getDesaceleracionMaxima();
+    if(Math.abs(velocidad) > velocidadMaxSegura){
+        prototipoRoto = true;
+    }
 
     }
     /* API para controles (getters y setters) */
@@ -73,6 +82,11 @@ public class VehiculoComponent extends Component {
     }
 
     //Metodos para UI
+
+    public double getFuerzaFriccion(){
+        return this.fuerzaFriccion;
+    }
+
     public double getVelocidad(){
         return this.velocidad;
     }
