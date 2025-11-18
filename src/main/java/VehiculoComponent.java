@@ -118,6 +118,9 @@ public class VehiculoComponent extends Component {
         }
         return this.fuerzaFrenadoMax / this.masa;
     }
+    public double getPosicion() {
+        return this.posicion;
+    }
 
     //Setters para configuración del prototipo
     public void setMasa (double masa){
@@ -142,5 +145,6 @@ public class VehiculoComponent extends Component {
         this.velocidadMaxSegura = velocidadMaxSegura;
 
     }
+
 
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SimuladorApp">
+   <children>
+      <TextField fx:id="txtMasa" layoutX="126.0" layoutY="46.0" prefHeight="26.0" prefWidth="74.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="48.0" prefHeight="26.0" prefWidth="115.0" text="Masa:" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="78.0" prefHeight="26.0" prefWidth="115.0" text="Fuerza Máx  Motor:" />
+      <TextField fx:id="txtFuerzaMotor" layoutX="126.0" layoutY="76.0" prefHeight="26.0" prefWidth="74.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="9.0" layoutY="104.0" prefHeight="26.0" prefWidth="115.0" text="Fuerza Frenado Máx:" />
+      <TextField fx:id="txtFuerzaFrenado" layoutX="126.0" layoutY="106.0" prefHeight="26.0" prefWidth="74.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="9.0" layoutY="134.0" prefHeight="26.0" prefWidth="115.0" text="Coeficiente Fricción:" />
+      <TextField fx:id="txtCoefF" layoutX="126.0" layoutY="135.0" prefHeight="26.0" prefWidth="74.0"/>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="9.0" layoutY="163.0" prefHeight="26.0" prefWidth="115.0" text="Coef. Aerodinámico:" />
+      <TextField fx:id="txtCoefAero" layoutX="126.0" layoutY="165.0" prefHeight="26.0" prefWidth="74.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="9.0" layoutY="193.0" prefHeight="26.0" prefWidth="115.0" text="Área Frontal:" />
+      <TextField fx:id="txtAreaFrontal" layoutX="126.0" layoutY="194.0" prefHeight="26.0" prefWidth="74.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="222.0" prefHeight="26.0" prefWidth="115.0" text="Velocidad Máx :" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="232.0" prefHeight="26.0" prefWidth="115.0" text="segura" />
+      <TextField fx:id="txtVelSegura" layoutX="125.0" layoutY="224.0" prefHeight="26.0" prefWidth="74.0" />
+      <Button fx:id="onIniciarClick" layoutX="35.0" layoutY="266.0" mnemonicParsing="false" onAction="#onIniciarClick" text="INICIAR" />
+      <ToggleButton layoutX="296.0" layoutY="264.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="89.0" text="ACELERAR" />
+      <ToggleButton layoutX="401.0" layoutY="265.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="90.0" text="FRENAR" />
+      <Button layoutX="102.0" layoutY="266.0" mnemonicParsing="false" text="REINICIAR" />
+      <TextField fx:id="lblVelocidad" layoutX="53.0" layoutY="319.0" prefHeight="26.0" prefWidth="74.0" />
+      <TextField fx:id="lblAceleracion" layoutX="138.0" layoutY="320.0" prefHeight="26.0" prefWidth="74.0" />
+      <TextField fx:id="lblPotencia" layoutX="222.0" layoutY="320.0" prefHeight="26.0" prefWidth="74.0" />
+      <TextField fx:id="lblFuerzaNeta" layoutX="306.0" layoutY="320.0" prefHeight="26.0" prefWidth="74.0" />
+      <TextField fx:id="lblDistanciaFrenado" layoutX="391.0" layoutY="321.0" prefHeight="26.0" prefWidth="74.0" />
+      <TextField fx:id="lblEstado" layoutX="475.0" layoutY="321.0" prefHeight="26.0" prefWidth="74.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="34.0" layoutY="340.0" prefHeight="26.0" prefWidth="115.0" text="Velocidad" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="138.0" layoutY="341.0" prefHeight="26.0" prefWidth="74.0" text="Aceleración" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="222.0" layoutY="342.0" prefHeight="26.0" prefWidth="74.0" text="Potencia" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="306.0" layoutY="342.0" prefHeight="26.0" prefWidth="74.0" text="Fuerza Neta" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="391.0" layoutY="342.0" prefHeight="26.0" prefWidth="74.0" text="Distancia de" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="391.0" layoutY="355.0" prefHeight="26.0" prefWidth="74.0" text="frenado" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="475.0" layoutY="343.0" prefHeight="26.0" prefWidth="74.0" text="Estado" />
+      <Pane fx:id="paneSimulacion" layoutX="212.0" layoutY="47.0" prefHeight="202.0" prefWidth="372.0">
+         <children>
+            <ImageView fx:id="imgCoche" fitHeight="150.0" fitWidth="200.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../OneDrive/Imágenes/CocheREVV.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
