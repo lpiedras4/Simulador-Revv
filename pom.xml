@@ -24,8 +24,12 @@
             <artifactId>fxgl</artifactId>
             <version>${fxgl.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>17.0.12</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
