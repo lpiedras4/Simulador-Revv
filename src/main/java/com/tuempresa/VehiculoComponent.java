@@ -42,6 +42,8 @@ public class VehiculoComponent extends Component {
 
     @Override
     public void onUpdate(double tpf) {
+        if (masa <= 0) return;
+
         peso = masa * gravedad;
         fuerzaNormal = peso;
         if(prototipoRoto){
@@ -56,22 +58,37 @@ public class VehiculoComponent extends Component {
             }
             fuerzaFrenadoActual = 0.0;
             if(estaFrenando){
-                fuerzaFrenadoActual = -fuerzaFrenadoMax;
+                double direccion = (velocidad > 0) ? 1 : -1;
+                if (Math.abs(velocidad) < 0.1) direccion = 0;
+                fuerzaFrenadoActual = -fuerzaFrenadoMax * direccion;
             }
 
-        fuerzaResistencia = (velocidad * velocidad) * areaFrontal * coefAero * (densidadAire/2);
-        fuerzaFriccion = -coefF*fuerzaNormal;
-        fuerzaNetaActual = fuerzaFrenadoActual + fuerzaMotorActual - fuerzaFriccion- fuerzaResistencia;
-        velocidad = velocidad + aceleracion * tpf;
-        aceleracion = velocidad/tpf;
-
+        fuerzaResistencia = -0.5 * densidadAire * areaFrontal * coefAero * (Math.abs(velocidad) * velocidad);
+        double direccionFriccion = 0;
+        if (Math.abs(velocidad) > 0.01) {
+            direccionFriccion = Math.signum(velocidad);
+        } else if (estaAcelerando) {
+            direccionFriccion = Math.signum(fuerzaMotorActual);
+        }
+        fuerzaFriccion = -coefF * fuerzaNormal * direccionFriccion;
+        fuerzaNetaActual = fuerzaFrenadoActual + fuerzaMotorActual + fuerzaFriccion + fuerzaResistencia;
+        aceleracion = fuerzaNetaActual / masa;
+        velocidad = velocidad + (aceleracion * tpf);
+        if (!estaAcelerando && Math.abs(velocidad) < 0.1 && Math.abs(fuerzaFrenadoActual) > 0) {
+            velocidad = 0;
+            aceleracion = 0;
+        }
         posicion = posicion + (velocidad*tpf);
+
         desplazamientoFrame = velocidad * tpf;
         trabajo = fuerzaMotorActual * desplazamientoFrame;
-        trabajoAcumulado = trabajo + trabajoAcumulado;
+        trabajoAcumulado += fuerzaMotorActual * desplazamientoFrame;
         potenciaActual = fuerzaMotorActual * velocidad;
+        potenciaActual/=745.7;
+        if (getDesaceleracionMaxima() != 0) {
+            distanciaFrenado = (velocidad*velocidad) / (2 * getDesaceleracionMaxima());
+        }
 
-        distanciaFrenado = (velocidad*velocidad) / (2*getDesaceleracionMaxima());
     if(Math.abs(velocidad) > velocidadMaxSegura){
         prototipoRoto = true;
     }
