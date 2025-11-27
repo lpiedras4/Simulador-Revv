@@ -1,3 +1,6 @@
+package com.tuempresa;
+
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -61,7 +64,7 @@ public class SimuladorApp {
     //Acceder a controlador simulador
     private VehiculoComponent vehiculo;
     private List<javafx.scene.image.Image> frames;
-
+    private AnimationTimer gameLoop;
 
     //Acción para botón "INICIAR"
 

@@ -1,3 +1,5 @@
+package com.tuempresa;
+
 import com.almasb.fxgl.entity.component.Component;
 
 public class VehiculoComponent extends Component {
