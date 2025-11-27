@@ -2,12 +2,9 @@ package com.tuempresa;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import java.io.IOException;
 
@@ -21,7 +18,8 @@ public class SimuladorApp {
 
     @FXML private Button btnAcelerar;
     @FXML private Button btnFrenar;
-
+    @FXML private Button btnIniciar;
+    @FXML private Button btnReiniciar;
 
     @FXML private TextField txtMasa;
     @FXML private TextField txtFuerzaMotor;
@@ -32,12 +30,12 @@ public class SimuladorApp {
     @FXML private TextField txtVelSegura;
 
     // Campos de Texto (Salidas / Etiquetas)
-    @FXML private TextField lblVelocidad;
-    @FXML private TextField lblAceleracion;
-    @FXML private TextField lblFuerzaNeta;
-    @FXML private TextField lblEstado;
-    @FXML private TextField lblPotencia;
-    @FXML private TextField lblDistanciaFrenado;
+    @FXML private Label lblVelocidad;
+    @FXML private Label lblAceleracion;
+    @FXML private Label lblFuerzaNeta;
+    @FXML private Label lblEstado;
+    @FXML private Label lblPotencia;
+    @FXML private Label lblDistanciaFrenado;
 
     // --- LÓGICA ---
     private VehiculoComponent vehiculo;
@@ -48,8 +46,7 @@ public class SimuladorApp {
     public void initialize() {
 
         try {
-            Image gifCamino = new Image(getClass().getResourceAsStream("/camino_loop.gif"));
-            imgCamino.setImage(gifCamino);
+            mostrarImagenEstatica();
         } catch (Exception e) {
             System.out.println("No se encontró el GIF. Usando imagen estática.");
         }
@@ -61,6 +58,11 @@ public class SimuladorApp {
         clip.widthProperty().bind(paneSimulador.widthProperty());
         clip.heightProperty().bind(paneSimulador.heightProperty());
         paneSimulador.setClip(clip);
+        lblVelocidad.setText("0.00 m/s");
+        lblAceleracion.setText("0.00 m/s²");
+        lblDistanciaFrenado.setText("0.00 m");
+        lblPotencia.setText("0.00 HP");
+        lblFuerzaNeta.setText("0.00 N");
     }
 
     @FXML
@@ -88,6 +90,10 @@ public class SimuladorApp {
             }
         };
 
+        btnIniciar.setVisible(false);
+        btnAcelerar.setVisible(true);
+        btnFrenar.setVisible(true);
+        btnReiniciar.setVisible(true);
         gameLoop.start();
         lblEstado.setText("Simulación corriendo...");
     }
@@ -113,6 +119,7 @@ public class SimuladorApp {
         //Checar si se rompió
         if (vehiculo.isPrototipoRoto()) {
             gameLoop.stop(); // Detener simulación
+            mostrarImagenEstatica();
             lblEstado.setText("¡PROTOTIPO ROTO!");
             mostrarAlerta("Falla Crítica", "El vehículo excedió la velocidad segura.");
         }
@@ -121,6 +128,7 @@ public class SimuladorApp {
     private boolean inicializarVehiculo() {
         vehiculo = new VehiculoComponent();
         try {
+            mostrarImagenMovimiento();
             vehiculo.setMasa(Double.parseDouble(txtMasa.getText()));
             vehiculo.setFuerzaMotorMaxima(Double.parseDouble(txtFuerzaMotor.getText()));
             vehiculo.setFuerzaFrenadoMaxima(Double.parseDouble(txtFuerzaFrenado.getText()));
@@ -140,12 +148,13 @@ public class SimuladorApp {
         if (btnAcelerar != null) {
             btnAcelerar.setOnMousePressed(e -> {
                 if (vehiculo != null) vehiculo.setAcelerando(true);
+                btnAcelerar.setFocusTraversable(false);
             });
             btnAcelerar.setOnMouseReleased(e -> {
                 if (vehiculo != null) vehiculo.setAcelerando(false);
+                btnFrenar.setFocusTraversable(false);
             });
         }
-
         if (btnFrenar != null) {
             btnFrenar.setOnMousePressed(e -> {
                 if (vehiculo != null) vehiculo.setFrenando(true);
@@ -161,7 +170,16 @@ public class SimuladorApp {
         if (gameLoop != null) gameLoop.stop();
         imgCoche.setLayoutX(0);
         lblVelocidad.setText("0.00 m/s");
+        lblAceleracion.setText("0.00 m/s²");
+        lblDistanciaFrenado.setText("0.00 m");
+        lblPotencia.setText("0.00 HP");
+        lblFuerzaNeta.setText("0.00 N");
         lblEstado.setText("Reiniciado");
+        btnIniciar.setVisible(true);
+        btnAcelerar.setVisible(false);
+        btnFrenar.setVisible(false);
+        btnReiniciar.setVisible(false);
+        mostrarImagenEstatica();
         // Limpiar el vehículo
         vehiculo = null;
     }
@@ -174,11 +192,19 @@ public class SimuladorApp {
                 txtMasa.getText().isBlank();
     }
 
-    private void mostrarAlerta(String titulo, String mensaje) {
+    private void mostrarAlerta(String titulo, String mensaje){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+    public void mostrarImagenEstatica(){
+        Image camino = new Image(getClass().getResourceAsStream("/camino.png"));
+        imgCamino.setImage(camino);
+    }
+    public void mostrarImagenMovimiento(){
+        Image gifCamino = new Image(getClass().getResourceAsStream("/camino_loop.gif"));
+        imgCamino.setImage(gifCamino);
     }
 }

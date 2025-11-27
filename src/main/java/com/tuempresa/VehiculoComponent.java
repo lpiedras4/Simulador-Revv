@@ -1,6 +1,8 @@
 package com.tuempresa;
 
 import com.almasb.fxgl.entity.component.Component;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class VehiculoComponent extends Component {
     //Inputs iniciales del usuario
@@ -164,6 +166,7 @@ public class VehiculoComponent extends Component {
         this.velocidadMaxSegura = velocidadMaxSegura;
 
     }
-
-
+    public boolean getEstaFrenando(){
+        return estaFrenando;
+    }
 }
